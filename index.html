@@ -9,20 +9,22 @@
 <meta property="og:description" content="บันทึกและคัดเลือกไอเดียโปรเจกต์จบของทีม: ผู้ใช้และปัญหา ขอบเขตเทคนิค การแบ่งงาน 2 คน และการให้คะแนน 4 ด้าน">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#15191c">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23f7b83d'/%3E%3Cpath d='M5.4 10.6V5.4h5.2M5.4 8h4.4' stroke='%2315191c' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <script>
 document.documentElement.classList.add('js');
-try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark' } catch (e) { document.documentElement.dataset.theme = 'dark' }
+try { var _t = localStorage.getItem('theme'); if (_t === 'light' || _t === 'dark') document.documentElement.dataset.theme = _t } catch (e) {}
 </script>
 <style>
 /* pre-compile fallback: only the root colour, so it cannot override the base layer
    (the body's own colours come from the themed tokens) */
 html { background: #050505; }
 html[data-theme="light"] { background: #f7f5f0; }
+@media (prefers-color-scheme: light) { html:not([data-theme]) { background: #f7f5f0; } }
 </style>
 <style type="text/tailwindcss">
 /* ------------------------------------------------------------------
@@ -56,7 +58,7 @@ html[data-theme="light"] { background: #f7f5f0; }
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light dark;
   /* aliases still read by the app's inline styles */
   --bg: var(--color-paper); --sf: var(--color-paper-2); --sf2: var(--color-paper-3);
   --ink: var(--color-ink); --mu: var(--color-muted); --ln: var(--color-rule);
@@ -72,15 +74,40 @@ html[data-theme="light"] { background: #f7f5f0; }
   --z-toast: 500;
 }
 
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #050505; --color-paper-2: #0a0a0b; --color-paper-3: #101012;
+  --color-ink: #f4f4f2; --color-ink-2: #c6c6c3; --color-muted: #8a8a87;
+  --color-rule: #1b1b1d; --color-rule-2: #2c2c30;
+  --color-accent: #e5b85c; --color-accent-ink: #141006; --color-accent-soft: #241b0c;
+  --color-focus: #e5b85c; --color-cool: #e5b85c; --color-cool-soft: #191a1d;
+  --color-ok: #7fb08a; --color-ok-soft: #12211a; --color-bad: #d9756b; --color-bad-soft: #241414;
+  --fx-line: 255,255,255;
+}
+
 [data-theme="light"] {
   color-scheme: light;
   --color-paper: #f7f5f0; --color-paper-2: #fffefb; --color-paper-3: #efeee7;
   --color-ink: #191917; --color-ink-2: #3c3c38; --color-muted: #6c6c66;
   --color-rule: #e0ded5; --color-rule-2: #c6c4b9;
-  --color-accent: #a2751c; --color-accent-ink: #fffdf6; --color-accent-soft: #f4e8cf;
-  --color-focus: #a2751c; --color-cool: #a2751c; --color-cool-soft: #efece1;
+  --color-accent: #8a6114; --color-accent-ink: #fffdf6; --color-accent-soft: #f4e8cf;
+  --color-focus: #8a6114; --color-cool: #8a6114; --color-cool-soft: #efece1;  /* 5.07:1 on paper, 5.43:1 for ink on it */
   --color-ok: #3f7a52; --color-ok-soft: #e4f0e6; --color-bad: #a8433a; --color-bad-soft: #f7e5e2;
   --fx-line: 0,0,0;
+}
+
+/* no stored choice: follow the system */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --color-paper: #f7f5f0; --color-paper-2: #fffefb; --color-paper-3: #efeee7;
+    --color-ink: #191917; --color-ink-2: #3c3c38; --color-muted: #6c6c66;
+    --color-rule: #e0ded5; --color-rule-2: #c6c4b9;
+    --color-accent: #8a6114; --color-accent-ink: #fffdf6; --color-accent-soft: #f4e8cf;
+    --color-focus: #8a6114; --color-cool: #8a6114; --color-cool-soft: #efece1;
+    --color-ok: #3f7a52; --color-ok-soft: #e4f0e6; --color-bad: #a8433a; --color-bad-soft: #f7e5e2;
+    --fx-line: 0,0,0;
+  }
 }
 
 @layer base {
@@ -91,7 +118,7 @@ html[data-theme="light"] { background: #f7f5f0; }
     font: 400 1rem/1.6 var(--font-sans); -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
   ::selection { background: color-mix(in oklab, var(--color-accent) 34%, transparent); color: var(--color-ink); }
   :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 4px; }
-  h1, h2, h3 { margin: 0; line-height: 1.18; letter-spacing: -0.012em; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
+  h1, h2, h3 { margin: 0; line-height: 1.18; letter-spacing: normal; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
   p { margin: 0; text-wrap: pretty; }
   button, input, select, textarea { font: inherit; color: inherit; }
   img, svg, video { display: block; }
@@ -115,7 +142,7 @@ html[data-theme="light"] { background: #f7f5f0; }
 
   .brand { display: flex; flex-direction: column; gap: 2px; margin: 0 8px 0 0; min-width: 0; line-height: 1.2; }
   .brand b { display: inline-flex; align-items: center; gap: 9px; font-size: 1.05rem; font-weight: 600;
-    letter-spacing: -0.015em; white-space: nowrap; }
+    letter-spacing: normal; white-space: nowrap; }
   .brand b::before { content: ""; width: 9px; height: 9px; border-radius: 2px; flex: none;
     background: var(--color-accent); transform: rotate(45deg);
     box-shadow: 0 0 14px color-mix(in oklab, var(--color-accent) 65%, transparent); }
@@ -138,13 +165,13 @@ html[data-theme="light"] { background: #f7f5f0; }
     background: var(--color-paper-2); border: 1px solid var(--color-rule-2);
     transition: border-color 180ms var(--ease-out), background-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out); }
   .srch svg { width: 14px; height: 14px; color: var(--color-muted); flex: none; }
-  .srch input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none;
+  .srch input { flex: 1; min-width: 0; align-self: stretch; min-height: 24px; padding: 0; border: 0; outline: none;
     background: none; color: var(--color-ink); font-size: 0.875rem; }
   .srch:focus-within { border-color: var(--color-accent); background: var(--color-paper-3);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 18%, transparent); }
 
   .sync { font-size: 0.72rem; color: var(--color-muted); white-space: nowrap;
-    font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+    font-variant-numeric: tabular-nums; letter-spacing: normal; }
 
   .ib { display: grid; place-items: center; width: var(--control-h); height: var(--control-h); flex: none; cursor: pointer;
     border: 1px solid var(--color-rule-2); border-radius: var(--radius-pill);
@@ -152,8 +179,10 @@ html[data-theme="light"] { background: #f7f5f0; }
     transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out); }
   .ib:hover { background: var(--color-paper-3); border-color: var(--color-muted); }
   .ib svg { width: 16px; height: 16px; }
-  :root:not([data-theme="light"]) .i-moon { display: none; }
+  :root[data-theme="dark"] .i-moon { display: none; }
   :root[data-theme="light"] .i-sun { display: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme]) .i-moon { display: none; } }
+  @media (prefers-color-scheme: light) { :root:not([data-theme]) .i-sun { display: none; } }
 
   /* ---------------- buttons: one pair, pill, hairline ---------------- */
   .btn { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium;
@@ -195,9 +224,9 @@ html[data-theme="light"] { background: #f7f5f0; }
   html.js .bns.on { opacity: 1; visibility: visible; }
 
   .bnt { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; min-width: 0; }
-  .bnt h2 { font-size: clamp(1.75rem, 3.1vw, 2.5rem); font-weight: 600; letter-spacing: -0.022em;
+  .bnt h2 { font-size: clamp(1.75rem, 3.1vw, 2.5rem); font-weight: 600; letter-spacing: normal;
     line-height: 1.16; max-width: 24ch; }
-  .bns.h0 h2 { font-size: clamp(2.1rem, 4.6vw, 3.5rem); font-weight: 700; letter-spacing: -0.028em;
+  .bns.h0 h2 { font-size: clamp(2.1rem, 4.6vw, 3.5rem); font-weight: 700; letter-spacing: normal;
     line-height: 1.12; max-width: 19ch; }
   @supports ((-webkit-background-clip: text) or (background-clip: text)) {
     .bnt h2 { background-image: linear-gradient(180deg, var(--color-ink) 18%, var(--color-ink) 46%,
@@ -225,13 +254,11 @@ html[data-theme="light"] { background: #f7f5f0; }
     transform: translateY(-50%); border-radius: 2px; background: var(--color-rule-2); }
   .bdot.on::before { background: var(--color-accent); }
   .bdot:hover::before { background: var(--color-muted); }
-  .bna, .bnp { min-height: 32px; min-width: 32px; padding: 0 10px; white-space: nowrap; cursor: pointer;
+  .bna { min-height: 32px; min-width: 32px; padding: 0 10px; white-space: nowrap; cursor: pointer;
     border: 1px solid transparent; border-radius: var(--radius-pill); background: none;
     color: var(--color-muted); font-size: 0.78rem; font-weight: 500; }
-  .bna:hover, .bnp:hover { background: color-mix(in srgb, var(--color-ink) 7%, transparent); color: var(--color-ink); }
-  .bna:active, .bnp:active { transform: translateY(1px); }
-  .bnp { border-color: var(--color-rule-2); }
-  .bnp[aria-pressed="true"] { border-color: var(--color-accent); color: var(--color-ink); }
+  .bna:hover { background: color-mix(in srgb, var(--color-ink) 7%, transparent); color: var(--color-ink); }
+  .bna:active { transform: translateY(1px); }
   .bnx { display: none; }
 
   /* ---------------- figures ---------------- */
@@ -323,7 +350,7 @@ html[data-theme="light"] { background: #f7f5f0; }
   .reading { display: inline-flex; align-items: baseline; gap: 2px; font-size: 1.15rem; font-weight: 600;
     line-height: 1; color: var(--color-accent); font-variant-numeric: tabular-nums; }
   .reading span { font-size: 0.75rem; font-weight: 400; color: var(--color-muted); }
-  .ck { width: 16px; height: 16px; margin: 0; flex: none; cursor: pointer; accent-color: var(--color-accent); }
+  .ck { width: 24px; height: 24px; margin: 0; flex: none; cursor: pointer; accent-color: var(--color-accent); }
   .cvb .ck { margin-left: auto; }
   .fv { display: grid; place-items: center; width: 30px; height: 30px; flex: none; padding: 0;
     border: 1px solid transparent; border-radius: var(--radius-pill); background: none;
@@ -518,7 +545,10 @@ html[data-theme="light"] { background: #f7f5f0; }
   .pbar b { font-size: 1.1rem; font-weight: 600; }
 
   /* dialogs */
+  /* Tailwind's preflight zeroes every margin, which also wipes the auto margins the
+     UA uses to centre a modal dialog in the top layer — put them back. */
   dialog { width: min(44rem, 92vw); max-height: 88vh; overflow: auto; padding: 24px;
+    margin: auto;
     color: var(--color-ink); background: var(--color-paper-2);
     border: 1px solid var(--color-rule-2); border-radius: 20px;
     box-shadow: 0 40px 90px -50px #000; }
@@ -576,9 +606,9 @@ html[data-theme="light"] { background: #f7f5f0; }
   .bdots { flex-basis: 100%; order: -1; justify-content: center; margin-inline: 0; }
   .bdot { width: 26px; height: 44px; }
   .bnd { flex-wrap: wrap; justify-content: center; row-gap: 4px; }
-  .bna, .bnp { min-height: 44px; min-width: 44px; }
+  .bna { min-height: 44px; min-width: 44px; }
   .fv, .x { min-width: 44px; min-height: 44px; }
-  .ck { width: 22px; height: 22px; }
+  .ck { width: 24px; height: 24px; }
   .tgc { min-height: 44px; }
   .top { display: grid; grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center; gap: 6px; }
@@ -663,7 +693,7 @@ html[data-theme="light"] { background: #f7f5f0; }
   <button class="ni" data-go="how">วิธีใช้งาน</button>
  </nav>
  <div class="tools">
-  <label class="srch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="visually-hidden" id="q-lb">ค้นหาไอเดีย แท็ก หรือชื่อสมาชิก</span><input id="q" type="search" placeholder="ค้นหาไอเดีย แท็ก หรือชื่อสมาชิก" autocomplete="off" aria-labelledby="q-lb"></label>
+  <label class="srch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><input id="q" type="search" placeholder="ค้นหาไอเดีย แท็ก หรือชื่อสมาชิก" autocomplete="off" aria-label="ค้นหาไอเดีย แท็ก หรือชื่อสมาชิก"></label>
   <span id="sync" class="sync" role="status">…</span>
   <button class="ib" id="theme" aria-label="สลับธีมสี"><svg class="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2 4.6 4.6M11.4 11.4l1.4 1.4M12.8 3.2 11.4 4.6M4.6 11.4 3.2 12.8"/></svg><svg class="i-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13 9.6A5.6 5.6 0 0 1 6.4 3a5.6 5.6 0 1 0 6.6 6.6Z"/></svg></button>
   <button class="btn" id="new" aria-label="สร้างไอเดียใหม่">ไอเดียใหม่</button>
@@ -783,12 +813,11 @@ const BN=[
 ['เปรียบเทียบและตัดสินใจ','เปิดเมนู เปรียบเทียบ เพื่อดูอันดับ แล้วกำหนดสถานะ Top Pick, ตัวเลือกสำรอง หรือตกไป'],
 ['เตรียมปรึกษาอาจารย์','จดความเสี่ยงและคำถามไว้ แล้วกด ส่งออก Markdown เพื่อคัดลอกไปส่งหรือเก็บไว้']
 ];
-let bn=0,bnHover=false,bnOff=true;
-try{bnOff=localStorage.getItem('bn-auto')!=='1'}catch(_){}
+let bn=0,bnHover=false;
 
 function bannerHtml(){
   const pad=n=>String(n).padStart(2,'0'),last=BN.length;
-  return`<div class="bn" id="bn" role="region" aria-label="แนะนำการใช้งาน"><div class="hero-fx" aria-hidden="true"><div class="hero-veil"></div></div>${BN.map((b,n)=>`<div class="bns h${n===0?0:1} ${n===bn?'on':''}"><div class="bnt"><h2>${b[0]}</h2><p>${b[1]}</p>${n===0?'<button class="btn bnc" data-bnnew>สร้างไอเดียใหม่</button>':''}</div><div class="bni"><span class="bnn">${pad(n+1)}</span><span class="bnl">/ ${pad(last)}</span></div></div>`).join('')}<div class="bnd"><button class="bna" data-bn="-1" aria-label="สไลด์ก่อนหน้า">‹</button><div class="bdots">${BN.map((_,n)=>`<button class="bdot ${n===bn?'on':''}" data-bng="${n}" aria-label="สไลด์ที่ ${n+1}"></button>`).join('')}</div><button class="bna" data-bn="1" aria-label="สไลด์ถัดไป">›</button><button class="bnp" aria-pressed="${bnOff}" ${bnOff?'data-bnon':'data-bnoff'}>${bnOff?'เล่น':'หยุด'}</button></div></div>`;
+  return`<div class="bn" id="bn" role="region" aria-label="แนะนำการใช้งาน"><div class="hero-fx" aria-hidden="true"><div class="hero-veil"></div></div>${BN.map((b,n)=>`<div class="bns h${n===0?0:1} ${n===bn?'on':''}"><div class="bnt"><h2>${b[0]}</h2><p>${b[1]}</p>${n===0?'<button class="btn bnc" data-bnnew>สร้างไอเดียใหม่</button>':''}</div><div class="bni"><span class="bnn">${pad(n+1)}</span><span class="bnl">/ ${pad(last)}</span></div></div>`).join('')}<div class="bnd"><button class="bna" data-bn="-1" aria-label="สไลด์ก่อนหน้า">‹</button><div class="bdots">${BN.map((_,n)=>`<button class="bdot ${n===bn?'on':''}" data-bng="${n}" aria-label="สไลด์ที่ ${n+1}"></button>`).join('')}</div><button class="bna" data-bn="1" aria-label="สไลด์ถัดไป">›</button></div></div>`;
 }
 function flash(e){e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),1600)}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3800)}
@@ -798,7 +827,7 @@ function bnGo(n){bn=(n+BN.length)%BN.length;const e=$('#bn');if(!e)return;e.quer
 document.addEventListener('mouseover',e=>{bnHover=!!e.target.closest('#bn')});
 document.addEventListener('focusin',e=>{if(e.target.closest('#bn'))bnHover=true});
 document.addEventListener('focusout',e=>{if(e.target.closest('#bn'))bnHover=false});
-setInterval(()=>{if(!bnHover&&!bnOff&&view==='home'&&!matchMedia('(prefers-reduced-motion:reduce)').matches)bnGo(bn+1)},5500);
+setInterval(()=>{if(!bnHover&&view==='home'&&!matchMedia('(prefers-reduced-motion:reduce)').matches)bnGo(bn+1)},5500);
 const PRESET=['web','app','security','data'];
 let tgOpen=false,tagF=null,qry='',sortBy='new',vmode='grid',backTo='home',pidx=0;
 function normTag(r){return String(r||'').trim().replace(/^#+/,'').replace(/\s+/g,'-').toLowerCase().slice(0,24)}
@@ -837,7 +866,7 @@ function renderHome(){
   const L=visible().slice();
   L.sort({new:(a,b)=>b.id-a.id,score:(a,b)=>total(b)-total(a),name:(a,b)=>(a.name||'~').localeCompare(b.name||'~','th'),fav:(a,b)=>(!!b.fav-!!a.fav)||(b.id-a.id)}[sortBy]);
   const ctl=`<div class="ctl"><button class="vm ${vmode==='grid'?'on':''}" data-vm="grid" aria-label="มุมมองการ์ด">▦</button><button class="vm ${vmode==='list'?'on':''}" data-vm="list" aria-label="มุมมองรายการ">☰</button><label class="srl" for="sort">เรียง</label><select id="sort" data-sort>${[['new','ล่าสุดก่อน'],['score','คะแนนสูงสุด'],['fav','ติดดาวก่อน'],['name','ชื่อ ก–ฮ']].map(o=>`<option value="${o[0]}" ${sortBy===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>`;
-  const bar=L.length?`<div class="bar"><label style="margin:0;display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="all" ${L.every(x=>sel.has(x.id))?'checked':''}> เลือกทั้งหมด</label><button class="btn ghost sm" id="delsel" ${sel.size?'':'disabled'}>ลบที่เลือก (${sel.size})</button></div>`:'';
+  const bar=L.length?`<div class="bar"><label style="margin:0;display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="all" style="width:24px;height:24px;margin:0;flex:none;accent-color:var(--color-accent)" ${L.every(x=>sel.has(x.id))?'checked':''}> เลือกทั้งหมด</label><button class="btn ghost sm" id="delsel" ${sel.size?'':'disabled'}>ลบที่เลือก (${sel.size})</button></div>`:'';
   $('#main').innerHTML=bannerHtml()+stats()+`<div class="frow" id="tags">${tagBar()}${ctl}</div><div class="hd" id="list"><h2>ไอเดียทั้งหมด (${L.length})</h2>${bar}</div>`+(L.length?`<div class="cds ${vmode}">${L.map(card).join('')}</div>`:`<div class="empty">${ideas.length?'ไม่พบไอเดียที่ตรงกับการค้นหา':'ยังไม่มีไอเดีย<br>กดปุ่ม + มุมขวาล่างเพื่อเริ่มบันทึก'}</div>`);
 }
 const PEOPLE=['Phuwanat Kunwaraapiphat','Wisawa Junhom'];
@@ -944,8 +973,6 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('click',e=>{
   const b=e.target.closest('button,tr.cl');if(!b)return;const i=cur_(),d=b.dataset;
-  if(d.bnoff!==undefined){bnOff=true;try{localStorage.setItem('bn-auto','0')}catch(_){}renderHome();return}
-  if(d.bnon!==undefined){bnOff=false;try{localStorage.setItem('bn-auto','1')}catch(_){}renderHome();return}
   if(d.bn!==undefined){bnGo(bn+ +d.bn);return}
   if(d.bng!==undefined){bnGo(+d.bng);return}
   if(d.bnnew!==undefined){$('#new').click();return}
@@ -983,7 +1010,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{const t=e.target;if(t.type==='date'&&t.dataset.k){const i=cur_();if(i){if(!t.value){t.value=todayISO();i.date=t.value;save()}t.closest('.dt').querySelector('.dtv').textContent=fmtDate(t.value)}return}if(t.dataset.sort!==undefined){sortBy=t.value;renderHome();return}if(t.dataset.tgck!==undefined){toggleTag(t.dataset.tgck,t.checked);return}if(t.dataset.ck){const id=+t.dataset.ck;t.checked?sel.add(id):sel.delete(id);renderHome()}else if(t.id==='all'){sel.clear();if(t.checked)visible().forEach(x=>sel.add(x.id));renderHome()}});
 document.addEventListener('click',e=>{const t=e.target;if(t.type==='date'&&t.showPicker){try{t.showPicker()}catch(_){}}});
-function setThemeMeta(n){const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=n==='dark'?'#15191c':'#faf8f4'}
+function setThemeMeta(n){document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{m.removeAttribute('media');m.content=n==='dark'?'#050505':'#f7f5f0'})}
 setThemeMeta(document.documentElement.dataset.theme);
 $('#theme').onclick=()=>{const r=document.documentElement,n=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=n;setThemeMeta(n);try{localStorage.setItem('theme',n)}catch(e){}};
 $('#new').onclick=()=>{const n=blank();drafts.add(n.id);ideas.unshift(n);cur=n.id;editSnap=null;show('edit')};
