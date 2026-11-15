@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# secrets / local env
+.env
+.env.*
+
+# local tool state
+.freebuff/
+.hallmark/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
